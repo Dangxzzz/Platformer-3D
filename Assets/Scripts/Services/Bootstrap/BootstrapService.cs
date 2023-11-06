@@ -33,6 +33,7 @@ namespace Platformer.Services.Bootstrap
 
         private async UniTask BootstrapAsync()
         {
+            await UniTask.Delay(5*1000);
             _gameService.TransitionToGame();
         }
 
