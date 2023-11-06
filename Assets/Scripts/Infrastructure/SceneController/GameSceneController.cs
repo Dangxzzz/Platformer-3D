@@ -6,7 +6,10 @@ namespace Platformer.Infrastructure.SceneController
     {
         #region Unity lifecycle
 
-        private void Start() { }
+        private void Start()
+        {
+            
+        }
 
         #endregion
     }

@@ -1,3 +1,4 @@
+using Platformer.Services.InputService;
 using Zenject;
 
 namespace Platformer.Infrastructure.Installers
@@ -8,7 +9,7 @@ namespace Platformer.Infrastructure.Installers
 
         public override void InstallBindings()
         {
-            // InputServiceInstaller.Install(Container);
+            InputServiceInstaller.Install(Container);
         }
 
         #endregion
