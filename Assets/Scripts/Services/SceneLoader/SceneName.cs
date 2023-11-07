@@ -7,6 +7,7 @@ namespace Platformer.Services.SceneLoader
         #region Variables
 
         public const string Game = "GameScene";
+        public const string Game2 = "GameScene2";
 
         #endregion
     }

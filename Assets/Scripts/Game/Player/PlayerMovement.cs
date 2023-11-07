@@ -24,12 +24,15 @@ namespace Platformer.Game.Player
         private IInputService _inputService;
 
         private Vector3 _moveVector;
+        private bool _isGrounded;
 
         #endregion
 
         #region Properties
 
         public Vector3 Velocity => _moveVector;
+
+        public bool IsGrounded => _isGrounded;
 
         #endregion
 
@@ -53,17 +56,17 @@ namespace Platformer.Game.Player
 
             // _characterController.Move(_moveVector * Time.deltaTime);
 
-            bool isGrounded =
+             _isGrounded =
                 Physics.CheckSphere(_checkGroundTransform.position, _checkGroundRadius, _checkGroundLayerMask);
 
-            if (isGrounded && _fallVector.y < 0)
+            if (_isGrounded && _fallVector.y < 0)
             {
                 _fallVector.y = 0;
             }
 
             float gravity = Physics.gravity.y * _gravityMultiplier;
 
-            if (isGrounded && _inputService.IsJump)
+            if (_isGrounded && _inputService.IsJump)
             {
                 _fallVector.y = Mathf.Sqrt(_jumpHeight * -3f * gravity);
             }
