@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03e6a8de13d94bb1963df645c06963fd, type: 3}
+  m_Name: SoundConfig
+  m_EditorClassIdentifier: 
+  loseSound: {fileID: 8300000, guid: 1ff6856c1b64f084284ddd554b116219, type: 3}
+  buttonSound: {fileID: 8300000, guid: 7a8b93efe630ecc478e5a73ff5a8c86b, type: 3}
+  coinSound: {fileID: 8300000, guid: 2be7f24187c168f44830a2ed9b72fbc7, type: 3}
