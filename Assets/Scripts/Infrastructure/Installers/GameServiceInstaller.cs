@@ -1,5 +1,5 @@
 using Platformer.Services.Game;
-using Platformer.Services.SoundService;
+using Platformer.Services.SoundServiceFolder;
 using Zenject;
 
 namespace Platformer.Infrastructure.Installers
@@ -11,7 +11,6 @@ namespace Platformer.Infrastructure.Installers
         public override void InstallBindings()
         {
             Container.Bind<GameService>().AsSingle();
-            Container.Bind<SoundService>().AsSingle();
         }
 
         #endregion

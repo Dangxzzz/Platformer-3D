@@ -46,6 +46,8 @@ namespace Platformer.Level
             sequence.Append(transform.DOMove(_endPosition, _animationDuration)
                 .SetUpdate(UpdateType.Fixed));
             sequence.AppendCallback(() => PlayUnfallAnimation());
+
+            _tween = sequence;
         }
         
         private void PlayUnfallAnimation()

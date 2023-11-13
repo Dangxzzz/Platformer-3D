@@ -9,12 +9,29 @@ namespace Platformer.Services.LevelManagerService
 {
     public class LevelService
     {
-        private SceneLoaderService _sceneLoaderService;
-        private  List<CoinPoint> _coins = new();
-        private List<CoinPoint> _deactivatedCoins = new List<CoinPoint>();
+        #region Variables
+
+        private readonly List<CoinPoint> _coins = new();
+        private readonly List<CoinPoint> _deactivatedCoins = new();
         private bool _isDead;
+        private SceneLoaderService _sceneLoaderService;
+
+        #endregion
+
+        #region Events
 
         public event Action OnLevelComplite;
+
+        #endregion
+
+        #region Properties
+
+        public bool IsDead => _isDead;
+
+        #endregion
+
+        #region Public methods
+
         [Inject]
         public void Construct(SceneLoaderService sceneLoaderService)
         {
@@ -24,20 +41,10 @@ namespace Platformer.Services.LevelManagerService
         {
             _coins.Add(coin);
         }
-        public bool IsDead => _isDead;
+
         public void OnDeathHappened()
         {
             _isDead = true;
-        }
-
-        public void RestartGame()
-        {
-            SetStartParameters();
-        }
-        private void SetStartParameters()
-        {
-            _isDead = false;
-            ReactivateDeactivatedCoins();
         }
 
         public void OnPickCoin(CoinPoint coin)
@@ -48,20 +55,35 @@ namespace Platformer.Services.LevelManagerService
                 Debug.Log("Complete");
                 OnLevelComplite?.Invoke();
             }
+
             _deactivatedCoins.Add(coin);
         }
+
+        public void RestartGame()
+        {
+            SetStartParameters();
+        }
+
+        #endregion
+
+        #region Private methods
+
         private void ReactivateDeactivatedCoins()
         {
             foreach (CoinPoint coin in _deactivatedCoins)
             {
                 coin.gameObject.SetActive(true);
             }
+
             _deactivatedCoins.Clear();
         }
 
-        public void LoadNextLevel()
+        private void SetStartParameters()
         {
-            _sceneLoaderService.LoadNextSceneAsync();
+            _isDead = false;
+            ReactivateDeactivatedCoins();
         }
+
+        #endregion
     }
 }

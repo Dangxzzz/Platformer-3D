@@ -1,7 +1,7 @@
 ﻿using System;
 using DG.Tweening;
 using Platformer.Services.LevelManagerService;
-using Platformer.Services.SoundService;
+using Platformer.Services.SoundServiceFolder;
 using UnityEngine;
 using Zenject;
 
@@ -9,6 +9,8 @@ namespace Platformer.Level
 {
     public class CoinPoint :MonoBehaviour
     {
+        private const string Player = "Player";
+        
         [SerializeField] private float _rotationSpeed = 100f;
         [SerializeField] private float _bounceHeight = 0.1f;
        [SerializeField] private float _bounceDuration = 1.0f;
@@ -33,29 +35,30 @@ namespace Platformer.Level
        private void Start()
         {
             _levelService.OnCoinCreated(this);
-            RotateCoin();
             BounceCoin();
         }
         
-        private void RotateCoin()
-        {
-            _tween=transform.DORotate(new Vector3(0, 360, 0), _rotationSpeed, RotateMode.FastBeyond360)
-                .SetLoops(-1, LoopType.Restart)
-                .SetEase(Ease.Linear);
-        }
+     
 
         private void BounceCoin()
         {
-            _tween=transform.DOMoveY(transform.position.y + _bounceHeight, _bounceDuration)
-                .SetLoops(-1, LoopType.Yoyo)
-                .SetEase(Ease.InOutQuad);
+            Sequence sequence = DOTween.Sequence();
+            _tween = sequence;
+            
+            sequence.Append(transform.DOMoveY(transform.position.y + _bounceHeight, _bounceDuration)
+                .SetLoops(int.MaxValue, LoopType.Yoyo)
+                .SetEase(Ease.InOutQuad));
+
+            sequence.Join(transform.DORotate(new Vector3(0, 360, 0), _rotationSpeed, RotateMode.FastBeyond360)
+                .SetLoops(int.MaxValue, LoopType.Restart)
+                .SetEase(Ease.Linear));
         }
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("Player"))
+            if (other.CompareTag(Player))
             {
-                // _soundService.PlayCoinSound();
+                _soundService.PlaySound(SoundType.Coin);
                 gameObject.SetActive(false);
                 _levelService.OnPickCoin(this);
             }

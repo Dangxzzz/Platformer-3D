@@ -9,9 +9,6 @@ namespace Platformer.Level
     public class Door : MonoBehaviour
     {
         #region Variables
-
-        [Header("Config")]
-        [SerializeField] private bool _isDamaged;
         
         [Header("Animation")]
         [SerializeField] private Vector3 _startPosition;
@@ -26,14 +23,7 @@ namespace Platformer.Level
         #endregion
 
         #region Public methods
-
-        public void OnTriggerEnter(Collider other)
-        {
-            if (_isDamaged && other.TryGetComponent(out PlayerDeath playerDeath))
-            {
-               playerDeath.PlayDeath();
-            }
-        }
+        
 
         private void OnDisable()
         {

@@ -12,6 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03e6a8de13d94bb1963df645c06963fd, type: 3}
   m_Name: SoundConfig
   m_EditorClassIdentifier: 
-  loseSound: {fileID: 8300000, guid: 1ff6856c1b64f084284ddd554b116219, type: 3}
-  buttonSound: {fileID: 8300000, guid: 7a8b93efe630ecc478e5a73ff5a8c86b, type: 3}
-  coinSound: {fileID: 8300000, guid: 2be7f24187c168f44830a2ed9b72fbc7, type: 3}
+  _sounds:
+  - Clip: {fileID: 8300000, guid: 2be7f24187c168f44830a2ed9b72fbc7, type: 3}
+    Name: Coin
+    Type: 0
+  - Clip: {fileID: 8300000, guid: 1ff6856c1b64f084284ddd554b116219, type: 3}
+    Name: Lose
+    Type: 1

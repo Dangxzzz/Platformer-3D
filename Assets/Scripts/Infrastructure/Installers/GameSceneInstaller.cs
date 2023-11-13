@@ -1,5 +1,6 @@
 using Platformer.Services.InputService;
 using Platformer.Services.LevelManagerService;
+using Platformer.Services.SoundServiceFolder;
 using Zenject;
 
 namespace Platformer.Infrastructure.Installers
@@ -12,6 +13,7 @@ namespace Platformer.Infrastructure.Installers
         {
             InputServiceInstaller.Install(Container);
             LevelServiceInstaller.Install(Container);
+            SoundServiceInstaller.Install(Container);
         }
 
         #endregion

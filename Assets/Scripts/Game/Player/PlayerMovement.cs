@@ -6,7 +6,7 @@ namespace Platformer.Game.Player
 {
     public class PlayerMovement : MonoBehaviour
     {
-          #region Variables
+        #region Variables
 
         [SerializeField] private CharacterController _characterController;
         [SerializeField] private float _speed = 1f;
@@ -22,17 +22,18 @@ namespace Platformer.Game.Player
 
         private Vector3 _fallVector;
         private IInputService _inputService;
+        private bool _isGrounded;
+        private bool _isTeleport;
 
         private Vector3 _moveVector;
-        private bool _isGrounded;
 
         #endregion
 
         #region Properties
 
-        public Vector3 Velocity => _moveVector;
-
         public bool IsGrounded => _isGrounded;
+
+        public Vector3 Velocity => _moveVector;
 
         #endregion
 
@@ -50,35 +51,41 @@ namespace Platformer.Game.Player
 
         private void Update()
         {
-            Vector2 axis = _inputService.Axes;
-            _moveVector = transform.right * axis.x + transform.forward * axis.y;
-            _moveVector *= _speed;
-
-            // _characterController.Move(_moveVector * Time.deltaTime);
-
-             _isGrounded =
-                Physics.CheckSphere(_checkGroundTransform.position, _checkGroundRadius, _checkGroundLayerMask);
-
-            if (_isGrounded && _fallVector.y < 0)
+            if (!_isTeleport)
             {
-                _fallVector.y = 0;
+                Vector2 axis = _inputService.Axes;
+                _moveVector = transform.right * axis.x + transform.forward * axis.y;
+                _moveVector *= _speed;
+
+                // _characterController.Move(_moveVector * Time.deltaTime);
+
+                _isGrounded =
+                    Physics.CheckSphere(_checkGroundTransform.position, _checkGroundRadius, _checkGroundLayerMask);
+
+                if (_isGrounded && _fallVector.y < 0)
+                {
+                    _fallVector.y = 0;
+                }
+
+                float gravity = Physics.gravity.y * _gravityMultiplier;
+
+                if (_isGrounded && _inputService.IsJump)
+                {
+                    _fallVector.y = Mathf.Sqrt(_jumpHeight * -3f * gravity);
+                }
+
+                _fallVector.y += gravity * Time.deltaTime;
+                // _characterController.Move(_fallVector * Time.deltaTime);
             }
-
-            float gravity = Physics.gravity.y * _gravityMultiplier;
-
-            if (_isGrounded && _inputService.IsJump)
-            {
-                _fallVector.y = Mathf.Sqrt(_jumpHeight * -3f * gravity);
-            }
-
-            _fallVector.y += gravity * Time.deltaTime;
-            // _characterController.Move(_fallVector * Time.deltaTime);
         }
 
         private void FixedUpdate()
         {
-            _characterController.Move(_moveVector * Time.fixedDeltaTime);
-            _characterController.Move(_fallVector * Time.fixedDeltaTime);
+            if (!_isTeleport)
+            {
+                _characterController.Move(_moveVector * Time.fixedDeltaTime);
+                _characterController.Move(_fallVector * Time.fixedDeltaTime);
+            }
         }
 
         private void OnDrawGizmos()
@@ -88,6 +95,19 @@ namespace Platformer.Game.Player
                 Gizmos.color = Color.red;
                 Gizmos.DrawWireSphere(_checkGroundTransform.position, _checkGroundRadius);
             }
+        }
+
+        #endregion
+
+        #region Public methods
+
+        public void TeleportToStartPoint(Transform startPoint)
+        {
+            _characterController.enabled = false;
+            transform.position = startPoint.position;
+            _characterController.Move(startPoint.position);
+            transform.position = startPoint.position;
+            _characterController.enabled = true;
         }
 
         #endregion

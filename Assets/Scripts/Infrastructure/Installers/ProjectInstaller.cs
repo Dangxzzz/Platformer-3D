@@ -1,4 +1,5 @@
 using Platformer.Services.Bootstrap;
+using Platformer.Services.SoundServiceFolder;
 using Zenject;
 
 namespace Platformer.Infrastructure.Installers
@@ -11,6 +12,7 @@ namespace Platformer.Infrastructure.Installers
         {
             SceneLoaderServiceInstaller.Install(Container);
             GameServiceInstaller.Install(Container);
+            SoundServiceInstaller.Install(Container);
         }
 
         #endregion

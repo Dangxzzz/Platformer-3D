@@ -1,6 +1,7 @@
 
+using System;
 using Platformer.Services.LevelManagerService;
-using Platformer.Services.SoundService;
+using Platformer.Services.SoundServiceFolder;
 using UnityEngine;
 using Zenject;
 
@@ -9,6 +10,8 @@ namespace Platformer.Game.Player
     public class PlayerDeath : MonoBehaviour
     {
         [SerializeField] private GameObject _deathEffect;
+        [SerializeField] private PlayerMovement _playerMovement;
+        [SerializeField] private Transform _startPoint;
         private Vector3 _startPosition;
         private LevelService _levelService;
         private SoundService _soundService;
@@ -21,11 +24,16 @@ namespace Platformer.Game.Player
             _soundService = soundService;
         }
 
+        private void Start()
+        {
+            _startPosition = transform.position;
+        }
+
         public void PlayDeath()
         {
-                // _soundService.PlayLoseSound();
+                _soundService.PlaySound(SoundType.Lose);
                 _levelService.OnDeathHappened();
-                transform.position = _startPosition;
+                _playerMovement.TeleportToStartPoint(_startPoint);
                 Instantiate(_deathEffect, transform.position, Quaternion.Euler(-90f, 0, 0));
                 _levelService.RestartGame();
         }

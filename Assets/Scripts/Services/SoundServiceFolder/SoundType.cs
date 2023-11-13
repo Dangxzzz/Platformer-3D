@@ -1,7 +1,8 @@
 ﻿namespace Platformer.Services.SoundServiceFolder
 {
-    public class SoundType
+    public enum SoundType
     {
-        
+        Coin=0,
+        Lose=1
     }
 }

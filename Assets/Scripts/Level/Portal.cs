@@ -1,4 +1,5 @@
 using System;
+using Platformer.Services.Game;
 using Platformer.Services.LevelManagerService;
 using UnityEngine;
 using Zenject;
@@ -10,10 +11,12 @@ namespace Platformer.Level
         [SerializeField] private GameObject _portal;
         
         private LevelService _levelService;
+        private GameService _gameService;
         [Inject]
-        public void Construct(LevelService levelService)
+        public void Construct(LevelService levelService, GameService gameService)
         {
             _levelService = levelService;
+            _gameService = gameService;
         }
 
         private void Start()
@@ -33,7 +36,7 @@ namespace Platformer.Level
 
         private void OnTriggerEnter(Collider other)
         {
-            _levelService.LoadNextLevel();
+            _gameService.LoadNextLevel();
         }
     }
 }

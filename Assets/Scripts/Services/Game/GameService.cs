@@ -27,6 +27,11 @@ namespace Platformer.Services.Game
         {
             _sceneLoader.LoadSceneAsync(SceneName.Game).Forget();
         }
+        
+        public void LoadNextLevel()
+        {
+            _sceneLoader.LoadNextSceneAsync();
+        }
 
         #endregion
     }
