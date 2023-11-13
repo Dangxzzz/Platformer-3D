@@ -33,7 +33,7 @@ namespace Platformer.Game.Player
         {
                 _soundService.PlaySound(SoundType.Lose);
                 _levelService.OnDeathHappened();
-                _playerMovement.TeleportToStartPoint(_startPoint);
+                _playerMovement.Teleport(_startPoint);
                 Instantiate(_deathEffect, transform.position, Quaternion.Euler(-90f, 0, 0));
                 _levelService.RestartGame();
         }

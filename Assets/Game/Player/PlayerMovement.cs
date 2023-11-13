@@ -101,12 +101,12 @@ namespace Platformer.Game.Player
 
         #region Public methods
 
-        public void TeleportToStartPoint(Transform startPoint)
+        public void Teleport(Transform teleportPosition)
         {
             _characterController.enabled = false;
-            transform.position = startPoint.position;
-            _characterController.Move(startPoint.position);
-            transform.position = startPoint.position;
+            transform.position = teleportPosition.position;
+            _characterController.Move(teleportPosition.position);
+            transform.position = teleportPosition.position;
             _characterController.enabled = true;
         }
 
