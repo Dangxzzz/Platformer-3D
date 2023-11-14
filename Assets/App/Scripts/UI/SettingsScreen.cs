@@ -1,3 +1,4 @@
+using Platformer.App.Scripts.Services.SoundServiceFolder;
 using Platformer.Services.SoundServiceFolder;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,6 +11,7 @@ namespace Platformer.App.Scripts.UI
         #region Variables
 
         [SerializeField] private Slider _soundSlider;
+        [SerializeField] private Slider _musicSlider;
 
         private SoundService _soundService;
 
@@ -30,10 +32,17 @@ namespace Platformer.App.Scripts.UI
         private void Start()
         {
             _soundSlider.onValueChanged.AddListener(OnSoundSliderChanged);
+            _musicSlider.onValueChanged.AddListener(OnMusicSliderChanged);
+        }
+
+        private void OnMusicSliderChanged(float value)
+        {
+            _soundService.SetSoundVolume(value);
         }
 
         private void OnEnable()
         {
+            _musicSlider.value = _soundService.MusicVolume;
             _soundSlider.value = _soundService.SoundVolume;
         }
 

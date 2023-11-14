@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Platformer.Services.SoundServiceFolder;
 using UnityEngine;
 
-namespace Platformer.Services.SoundServiceFolder
+namespace Platformer.App.Scripts.Services.SoundServiceFolder
 {
     [CreateAssetMenu(fileName = nameof(SoundServiceConfig), menuName = "Platformer/Game/SoundConfig")]
     public class SoundServiceConfig :ScriptableObject 

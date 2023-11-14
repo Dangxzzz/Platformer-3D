@@ -1,22 +1,30 @@
-﻿using ModestTree;
+﻿using System.Collections;
+using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
+using ModestTree;
+using Platformer.Services.SoundServiceFolder;
 using UnityEngine;
 
-namespace Platformer.Services.SoundServiceFolder
+namespace Platformer.App.Scripts.Services.SoundServiceFolder
 {
     public class SoundService
     {
         #region Variables
 
         private const string ConfigPath = "Configs/Audio/SoundConfig";
-        private const string MusicSourcePrefabPath = "Configs/Audio/MusicSource";
+        private const string MusicConfigPath = "Configs/Audio/MusicConfig";
         private const string SoundPrefsKey = "Audio/SoundVolume";
+        private const string MusicPrefsKey = "Audio/MusicVolume";
 
-        private SoundServiceConfig _config;
+        private SoundServiceConfig _configSounds;
+        private MusicSourseConfig _musicSourseConfig;
         private AudioSource _musicAudioSource;
 
         private readonly Transform _rootTransform;
         private Transform _serviceRootTransform;
         private AudioSource _soundAudioSource;
+        
+        AudioClip _prevMusic;
 
         #endregion
 
@@ -26,6 +34,12 @@ namespace Platformer.Services.SoundServiceFolder
         {
             get => PlayerPrefs.GetFloat(SoundPrefsKey, 1);
             private set => PlayerPrefs.SetFloat(SoundPrefsKey, value);
+        }
+
+        public float MusicVolume
+        {
+            get => PlayerPrefs.GetFloat(MusicPrefsKey, 1);
+            private set => PlayerPrefs.SetFloat(MusicPrefsKey, value);
         }
 
         #endregion
@@ -51,26 +65,55 @@ namespace Platformer.Services.SoundServiceFolder
 
         public void PlaySound(SoundType type)
         {
-            AudioClip clip = _config.GetSound(type);
+            AudioClip clip = _configSounds.GetSound(type);
             PlaySoundClip(clip);
         }
 
         public void SetSoundVolume(float value)
         {
             SoundVolume = value;
+            MusicVolume = value;
             _soundAudioSource.volume = SoundVolume;
+            _musicAudioSource.volume = MusicVolume;
         }
 
         #endregion
 
         #region Private methods
 
-        private void CreateMusicSource()
+        private async void CreateMusicSource()
         {
-            AudioSource prefab = Resources.Load<AudioSource>(MusicSourcePrefabPath);
-            _musicAudioSource = Object.Instantiate(prefab, _serviceRootTransform);
+            GameObject go = new("MusicSource");
+            _musicAudioSource = go.AddComponent<AudioSource>();
+            _musicAudioSource.volume = MusicVolume;
+            go.transform.SetParent(_serviceRootTransform);
+            _musicAudioSource.loop = false;
+            
+            await StartMusic().ConfigureAwait(false);
         }
-
+        
+        
+        private async Task StartMusic()
+        {
+            if (_musicSourseConfig != null)
+            {
+                int randomIndex = Random.Range(0, _musicSourseConfig.AudioClips.Count);
+                _musicAudioSource.clip = _musicSourseConfig.AudioClips[randomIndex];
+                if (_musicAudioSource.clip == _prevMusic)
+                {
+                    await StartMusic();
+                }
+                _prevMusic = _musicAudioSource.clip;
+            }
+            
+            _musicAudioSource.Play();
+            
+            await UniTask.Delay((int)(_musicAudioSource.clip.length * 1000));
+            await StartMusic().ConfigureAwait(false);
+            
+        }
+        
+        
         private void CreateRootObject()
         {
             _serviceRootTransform = new GameObject($"[{nameof(SoundService)}]").transform;
@@ -88,8 +131,9 @@ namespace Platformer.Services.SoundServiceFolder
         private void LoadConfig()
         {
             Debug.LogError("LoadConfig");
-            _config = Resources.Load<SoundServiceConfig>(ConfigPath);
-            Assert.IsNotNull(_config, $"{nameof(SoundService)}: {nameof(SoundServiceConfig)} is null " +
+            _configSounds = Resources.Load<SoundServiceConfig>(ConfigPath);
+            _musicSourseConfig = Resources.Load<MusicSourseConfig>(MusicConfigPath);
+            Assert.IsNotNull(_configSounds, $"{nameof(SoundService)}: {nameof(SoundServiceConfig)} is null " +
                                       $"on path '{ConfigPath}'");
         }
 

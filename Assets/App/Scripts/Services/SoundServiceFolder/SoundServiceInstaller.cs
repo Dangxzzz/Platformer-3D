@@ -1,4 +1,5 @@
-﻿using Zenject;
+﻿using Platformer.App.Scripts.Services.SoundServiceFolder;
+using Zenject;
 
 namespace Platformer.Services.SoundServiceFolder
 {
